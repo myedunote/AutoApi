@@ -88,10 +88,10 @@ def apiReq(method,a,url,data='QAQ'):
     return posttext.text
           
 
-#上传文件到onedrive(小于4M)
-def uploadFile(a,filesname,f):
-    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/content'
-    apiReq('put',a,url,f)
+###上传文件到onedrive(小于4M)
+##def uploadFile(a,filesname,f):
+##    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/content'
+##    apiReq('put',a,url,f)
     
         
 # 发送邮件到自定义邮箱
@@ -104,52 +104,52 @@ def sendEmail(a,subject,content):
                  'saveToSentItems': 'true'}            
     apiReq('post',a,url,json.dumps(mailmessage))	
 	
-#修改excel(这函数分离好像意义不大)
-#api-获取itemid: https://graph.microsoft.com/v1.0/me/drive/root/search(q='.xlsx')?select=name,id,webUrl
-def excelWrite(a,filesname,sheet):
-    print('    添加工作表')
-    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/worksheets/add'
-    data={
-         "name": sheet
-         }
-    apiReq('post',a,url,json.dumps(data))
-    print('    添加表格')
-    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/worksheets/'+sheet+r'/tables/add'
-    data={
-         "address": "A1:D8",
-         "hasHeaders": False
-         }
-    jsontxt=json.loads(apiReq('post',a,url,json.dumps(data)))
-    print('    添加行')
-    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/tables/'+jsontxt['id']+r'/rows/add'
-    rowsvalues=[[0]*4]*2
-    for v1 in range(0,2):
-        for v2 in range(0,4):
-            rowsvalues[v1][v2]=random.randint(1,1200)
-    data={
-         "values": rowsvalues
-         }
-    apiReq('post',a,url,json.dumps(data))
-    
-def taskWrite(a,taskname):
-    print("    创建任务列表")
-    url=r'https://graph.microsoft.com/v1.0/me/todo/lists'
-    data={
-         "displayName": taskname
-         }
-    listjson=json.loads(apiReq('post',a,url,json.dumps(data)))
-    print("    创建任务")
-    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']+r'/tasks'
-    data={
-         "title": taskname,
-         }
-    taskjson=json.loads(apiReq('post',a,url,json.dumps(data)))
-    print("    删除任务")
-    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']+r'/tasks/'+taskjson['id']
-    apiReq('delete',a,url)
-    print("    删除任务列表")
-    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']
-    apiReq('delete',a,url)    
+###修改excel(这函数分离好像意义不大)
+###api-获取itemid: https://graph.microsoft.com/v1.0/me/drive/root/search(q='.xlsx')?select=name,id,webUrl
+##def excelWrite(a,filesname,sheet):
+##    print('    添加工作表')
+##    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/worksheets/add'
+##    data={
+##         "name": sheet
+##         }
+##    apiReq('post',a,url,json.dumps(data))
+##    print('    添加表格')
+##    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/worksheets/'+sheet+r'/tables/add'
+##    data={
+##         "address": "A1:D8",
+##         "hasHeaders": False
+##         }
+##    jsontxt=json.loads(apiReq('post',a,url,json.dumps(data)))
+##    print('    添加行')
+##    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/AutoApi/App'+str(a)+r'/'+filesname+r':/workbook/tables/'+jsontxt['id']+r'/rows/add'
+##    rowsvalues=[[0]*4]*2
+##    for v1 in range(0,2):
+##        for v2 in range(0,4):
+##            rowsvalues[v1][v2]=random.randint(1,1200)
+##    data={
+##         "values": rowsvalues
+##         }
+##    apiReq('post',a,url,json.dumps(data))
+##    
+##def taskWrite(a,taskname):
+##    print("    创建任务列表")
+##    url=r'https://graph.microsoft.com/v1.0/me/todo/lists'
+##    data={
+##         "displayName": taskname
+##         }
+##    listjson=json.loads(apiReq('post',a,url,json.dumps(data)))
+##    print("    创建任务")
+##    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']+r'/tasks'
+##    data={
+##         "title": taskname,
+##         }
+##    taskjson=json.loads(apiReq('post',a,url,json.dumps(data)))
+##    print("    删除任务")
+##    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']+r'/tasks/'+taskjson['id']
+##    apiReq('delete',a,url)
+##    print("    删除任务列表")
+##    url=r'https://graph.microsoft.com/v1.0/me/todo/lists/'+listjson['id']
+##    apiReq('delete',a,url)    
     
 def teamWrite(a,channelname):
     #新建team
@@ -183,22 +183,22 @@ def teamWrite(a,channelname):
             url=r'https://graph.microsoft.com/v1.0/groups/'+teamlist['value'][teamcount]['id']
             apiReq('delete',a,url)  
             
-def onenoteWrite(a,notename):
-    print('    创建笔记本')
-    url=r'https://graph.microsoft.com/v1.0/me/onenote/notebooks'
-    data={
-         "displayName": notename,
-         }
-    notetxt = json.loads(apiReq('post',a,url,json.dumps(data)))
-    print('    创建笔记本分区')
-    url=r'https://graph.microsoft.com/v1.0/me/onenote/notebooks/'+notetxt['id']+r'/sections'
-    data={
-         "displayName": notename,
-         }
-    apiReq('post',a,url,json.dumps(data))
-    print('    删除笔记本')
-    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/Notebooks/'+notename
-    apiReq('delete',a,url)
+##def onenoteWrite(a,notename):
+##    print('    创建笔记本')
+##    url=r'https://graph.microsoft.com/v1.0/me/onenote/notebooks'
+##    data={
+##         "displayName": notename,
+##         }
+##    notetxt = json.loads(apiReq('post',a,url,json.dumps(data)))
+##    print('    创建笔记本分区')
+##    url=r'https://graph.microsoft.com/v1.0/me/onenote/notebooks/'+notetxt['id']+r'/sections'
+##    data={
+##         "displayName": notename,
+##         }
+##    apiReq('post',a,url,json.dumps(data))
+##    print('    删除笔记本')
+##    url=r'https://graph.microsoft.com/v1.0/me/drive/root:/Notebooks/'+notename
+##    apiReq('delete',a,url)
     
 #一次性获取access_token，降低获取率
 for a in range(1, int(app_num)+1):
